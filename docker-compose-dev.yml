@@ -2,8 +2,9 @@ version: "3.7"
 
 services:
   web:
+    platform: linux/amd64
     container_name: spring-reddi-server
-    # image: younggyolee/reddi
+    image: reddi-server
     build:
       context: .
       dockerfile: Dockerfile
