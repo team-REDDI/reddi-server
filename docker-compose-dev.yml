@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  web:
+    container_name: spring-reddi-server
+    # image: younggyolee/reddi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    env_file:
+      - .env.dev
+    volumes:
+      - ./:/app
