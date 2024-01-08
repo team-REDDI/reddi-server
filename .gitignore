@@ -73,3 +73,4 @@ secrets.yml
 .gradletasknamecache
 
 .env
+.env.*

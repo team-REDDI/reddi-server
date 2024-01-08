@@ -1,6 +1,22 @@
+---
 spring:
   config:
+    activate:
+      on-profile: local
+    import: optional:file:.env.local[.properties]
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
     import: optional:file:.env[.properties]
+---
+
+# default
+spring:
+  profiles:
+    active: local # default profile 을 local 로 설정
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
@@ -32,3 +48,6 @@ springdoc:
     - /**
   cache:
     disabled: true
+
+
+
