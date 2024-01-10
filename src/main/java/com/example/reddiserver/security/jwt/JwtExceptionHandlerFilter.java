@@ -1,6 +1,6 @@
 package com.example.reddiserver.security.jwt;
 
-import com.example.reddiserver.dto.security.JwtErrorResponse;
+import com.example.reddiserver.dto.security.response.JwtErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;

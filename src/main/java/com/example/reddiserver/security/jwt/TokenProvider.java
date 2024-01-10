@@ -1,6 +1,6 @@
 package com.example.reddiserver.security.jwt;
 
-import com.example.reddiserver.dto.security.TokenDto;
+import com.example.reddiserver.dto.security.response.TokenDto;
 import com.example.reddiserver.entity.RefreshToken;
 import com.example.reddiserver.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;

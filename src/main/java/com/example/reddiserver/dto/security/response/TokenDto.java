@@ -1,4 +1,4 @@
-package com.example.reddiserver.dto.security;
+package com.example.reddiserver.dto.security.response;
 
 import lombok.Builder;
 import lombok.Getter;

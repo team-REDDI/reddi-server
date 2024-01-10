@@ -1,4 +1,4 @@
-package com.example.reddiserver.dto.security;
+package com.example.reddiserver.dto.security.response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
