@@ -1,30 +1,25 @@
 package com.example.reddiserver.entity;
 
-import com.example.reddiserver.entity.base.BaseTimeEntity;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RefreshToken extends BaseTimeEntity {
+@RedisHash(value = "refreshToken", timeToLive = 60*60*24*3)
+public class RefreshToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
     private String refreshToken;
 
+    @Indexed
+    private String providerId;
+
+
     @Builder
-    public RefreshToken(String email, String refreshToken) {
-        this.email = email;
+    public RefreshToken(String providerId, String refreshToken) {
+        this.providerId = providerId;
         this.refreshToken = refreshToken;
     }
 

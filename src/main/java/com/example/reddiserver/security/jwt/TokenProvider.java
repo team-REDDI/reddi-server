@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30L;
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 242 * 60 * 60 * 1000L;
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 60 * 60 * 24 * 3L;
 
     @Value("${spring.jwt.secret}")
     private String secret;
@@ -65,17 +65,18 @@ public class TokenProvider implements InitializingBean {
         String accessToken = createToken(authentication.getName(), authorities, "access");
         String newRefreshToken = createToken(authentication.getName(), authorities, "refresh");
 
-        Optional<RefreshToken> oldRefreshToken = refreshTokenRepository.findByEmail(authentication.getName());
+        Optional<RefreshToken> oldRefreshToken = refreshTokenRepository.findByProviderId(authentication.getName());
 
         if (oldRefreshToken.isPresent()) {
             refreshTokenRepository.save(oldRefreshToken.get().updateToken(newRefreshToken));
         } else {
             RefreshToken refreshToken = RefreshToken.builder()
-                    .email(authentication.getName())
+                    .providerId(authentication.getName())
                     .refreshToken(newRefreshToken)
                     .build();
 
             refreshTokenRepository.save(refreshToken);
+            System.out.println("test");
         }
 
         return TokenDto.builder()
@@ -129,7 +130,7 @@ public class TokenProvider implements InitializingBean {
     public boolean refreshTokenValidation(String token) {
         if (!validateAccessToken(token)) return false;
 
-        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByEmail(getEmailFromToken(token));
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByProviderId(getEmailFromToken(token));
 
         return refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken());
     }
