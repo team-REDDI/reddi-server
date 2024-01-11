@@ -1,16 +1,14 @@
 package com.example.reddiserver.security.oauth.handler;
 
-import com.example.reddiserver.dto.security.TokenDto;
 import com.example.reddiserver.security.jwt.TokenProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -19,15 +17,17 @@ import java.io.IOException;
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        TokenDto tokenDto = tokenProvider.createAccessToken(authentication);
+        // Access, Refresh Token Body 저장
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
 
-        String targetUrl = UriComponentsBuilder.fromUriString(getDefaultTargetUrl())
-                .queryParam("token", tokenDto)
-                .build().toUriString();
+        String tokenDto = mapper.writeValueAsString(tokenProvider.createAccessToken(authentication));
+        response.getWriter().write(tokenDto);
 
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        response.getWriter().flush();
     }
 }

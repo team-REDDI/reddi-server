@@ -44,6 +44,6 @@ public class PrincipalOAuth2Details implements OAuth2User {
 
     @Override
     public String getName() {
-        return "name";
+        return member.getProviderId();
     }
 }

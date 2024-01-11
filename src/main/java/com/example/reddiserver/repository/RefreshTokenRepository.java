@@ -1,10 +1,12 @@
 package com.example.reddiserver.repository;
 
 import com.example.reddiserver.entity.RefreshToken;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
-    Optional<RefreshToken> findByEmail(String email);
+@Repository
+public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {
+    Optional<RefreshToken> findByProviderId(String providerId);
 }
