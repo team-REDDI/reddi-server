@@ -72,4 +72,5 @@ target
 secrets.yml
 .gradletasknamecache
 
-.env
+.env.dev
+.env.*

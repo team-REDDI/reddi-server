@@ -1,6 +1,28 @@
+---
 spring:
   config:
-    import: optional:file:.env[.properties]
+    activate:
+      on-profile: local
+    import: optional:file:.env.local[.properties]
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: optional:file:.env.dev[.properties]
+  jpa:
+    hibernate:
+      ddl-auto: update # 추후 수정
+---
+
+# default 공통 설정
+spring:
+  profiles:
+    active: local # default 프로파일 : local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
@@ -9,8 +31,6 @@ spring:
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    hibernate:
-      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
@@ -44,3 +64,7 @@ springdoc:
     - /**
   cache:
     disabled: true
+
+
+
+
