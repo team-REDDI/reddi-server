@@ -42,14 +42,29 @@ jobs:
         run: |
           # docker image 빌드
           # ECR push
-          
+
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com
-          
+
           docker build -t reddi-server .
-          
+
           docker tag reddi-server:latest 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
-          
+
           docker push 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
-          
-          
-          
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            
+            cd /home/ubuntu/
+            
+            ## docker-compose 실행
+            sudo chmod 666 /var/run/docker.sock
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
+            docker compose -f docker-compose-dev.yml up -d
+            docker image prune -f
+
