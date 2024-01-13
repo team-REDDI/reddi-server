@@ -3,11 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - feat/#10/infra-setup
+      - '*'
   pull_request:
     branches:
-      - main
-      - feat/#10/infra-setup
+      - '*'
 
 jobs:
   build:
