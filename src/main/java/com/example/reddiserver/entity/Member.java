@@ -25,7 +25,7 @@ public class Member extends BaseTimeEntity {
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String providerId;
 
     @Column(nullable = false)
     private String name;
@@ -42,8 +42,8 @@ public class Member extends BaseTimeEntity {
     private Authority authority;
 
     @Builder
-    public Member(String email, String name, String imageUrl, ProviderType providerType, Authority authority) {
-        this.email = email;
+    public Member(String providerId, String name, String imageUrl, ProviderType providerType, Authority authority) {
+        this.providerId = providerId;
         this.name = name;
         this.imageUrl = imageUrl;
         this.providerType = providerType;
