@@ -34,6 +34,10 @@ public class Brand extends BaseTimeEntity {
     @Column(nullable = false)
     private String content;
 
+    private String notion_page_id;
+
+    private String notion_page_url;
+
     @Builder
     public Brand(String name, String image_url, String content) {
         this.name = name;
