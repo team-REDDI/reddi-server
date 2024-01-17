@@ -7,26 +7,27 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+// 연결테이블
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "brand_categories")
-public class BrandCategory extends BaseTimeEntity {
+@Table(name = "post_tags")
+public class PostTag extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @JoinColumn(name = "post_property_id")
+    private PostProperty postProperty;
 
     @Builder
-    public BrandCategory(Brand brand, Category category) {
-        this.brand = brand;
-        this.category = category;
+    public PostTag(Post post, PostProperty postProperty) {
+        this.post = post;
+        this.postProperty = postProperty;
     }
 }

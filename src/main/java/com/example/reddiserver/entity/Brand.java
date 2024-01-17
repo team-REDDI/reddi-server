@@ -23,7 +23,7 @@ public class Brand extends BaseTimeEntity {
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "brand")
-    private List<BrandCategory> brandCategories = new ArrayList<>();
+    private List<BrandTag> brandTags = new ArrayList<>();
 
     @Column(nullable = false)
     private String name;
