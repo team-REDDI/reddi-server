@@ -1,4 +1,4 @@
-package com.example.reddiserver.service.notion;
+package com.example.reddiserver.service;
 
 import com.example.reddiserver.entity.Brand;
 import com.example.reddiserver.entity.BrandTag;

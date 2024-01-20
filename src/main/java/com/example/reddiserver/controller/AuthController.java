@@ -1,9 +1,9 @@
-package com.example.reddiserver.controller.auth;
+package com.example.reddiserver.controller;
 
 import com.example.reddiserver.common.ApiResponse;
 import com.example.reddiserver.dto.auth.request.ReissueRequestDto;
 import com.example.reddiserver.dto.security.response.TokenDto;
-import com.example.reddiserver.service.auth.AuthService;
+import com.example.reddiserver.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
