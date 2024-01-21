@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,10 +21,9 @@ public class BrandService {
 		List<Brand> brands = brandRepository.findAll();
 		List<BrandResponseDto> brandResponseDtos = new ArrayList<>();
 
-		System.out.println("111");
-
 		for (Brand brand : brands) {
-			brandResponseDtos.add(new BrandResponseDto(brand));
+			brandResponseDtos.add(BrandResponseDto.from(brand));
+
 		}
 
 		return brandResponseDtos;
@@ -33,7 +31,7 @@ public class BrandService {
 
 	public BrandContentsResponseDto getBrandById(Long id) {
 		Brand brand = brandRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 브랜드가 없습니다. id=" + id));
-		return new BrandContentsResponseDto(brand);
+		return BrandContentsResponseDto.from(brand);
 	}
 
 

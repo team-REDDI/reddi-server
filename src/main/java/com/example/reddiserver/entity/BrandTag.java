@@ -17,7 +17,7 @@ public class BrandTag extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // 연관관계 주인
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
