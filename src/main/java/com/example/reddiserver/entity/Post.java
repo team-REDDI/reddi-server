@@ -24,7 +24,7 @@ public class Post extends BaseTimeEntity {
     private List<BookmarkPost> bookmarkPosts = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
-    private List<PostCategory> postCategories = new ArrayList<>();
+    private List<PostTag> postTags = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "brand_id")

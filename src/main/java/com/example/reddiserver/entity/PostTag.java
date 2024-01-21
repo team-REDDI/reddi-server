@@ -7,11 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+// 연결테이블
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "post_categories")
-public class PostCategory extends BaseTimeEntity {
+@Table(name = "post_tags")
+public class PostTag extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,12 +22,12 @@ public class PostCategory extends BaseTimeEntity {
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @JoinColumn(name = "post_property_id")
+    private PostProperty postProperty;
 
     @Builder
-    public PostCategory(Post post, Category category) {
+    public PostTag(Post post, PostProperty postProperty) {
         this.post = post;
-        this.category = category;
+        this.postProperty = postProperty;
     }
 }

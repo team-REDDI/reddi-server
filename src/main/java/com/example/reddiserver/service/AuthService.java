@@ -1,4 +1,4 @@
-package com.example.reddiserver.service.auth;
+package com.example.reddiserver.service;
 
 import com.example.reddiserver.dto.auth.request.ReissueRequestDto;
 import com.example.reddiserver.dto.security.response.TokenDto;

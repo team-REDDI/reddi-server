@@ -65,6 +65,10 @@ springdoc:
   cache:
     disabled: true
 
-
+notion:
+  api:
+    key: ${NOTION_API_KEY}
+  brandDB:
+    id: ${NOTION_BRAND_DB_ID}
 
 
