@@ -2,6 +2,7 @@ package com.example.reddiserver.controller;
 
 import com.example.reddiserver.common.ApiResponse;
 import com.example.reddiserver.service.NotionService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ public class NotionController {
 
 	private final NotionService notionService;
 
+	@Hidden
 	@Operation(summary = "[테스트용] 노션 api 호출해서 자체 DB 갱신")
 	@GetMapping("/update")
 	public ApiResponse<List<String>> getNotionData() {
