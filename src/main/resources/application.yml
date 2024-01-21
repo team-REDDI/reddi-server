@@ -70,5 +70,7 @@ notion:
     key: ${NOTION_API_KEY}
   brandDB:
     id: ${NOTION_BRAND_DB_ID}
+  marketingDB:
+    id: ${NOTION_MARKETING_DB_ID}
 
 

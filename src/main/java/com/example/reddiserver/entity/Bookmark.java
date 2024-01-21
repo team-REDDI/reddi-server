@@ -22,7 +22,7 @@ public class Bookmark extends BaseTimeEntity {
     @OneToMany(mappedBy = "bookmark")
     private List<BookmarkPost> bookmarkPosts = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // 연관관계 주인
     @JoinColumn(name = "member_id")
     private Member member;
 

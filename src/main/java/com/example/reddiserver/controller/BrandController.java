@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/brand")
 public class BrandController {
 
-	private final BrandService brandService;;
+	private final BrandService brandService;
 
 	@Operation(summary = "브랜드 리스트 조회")
 	@GetMapping("/")

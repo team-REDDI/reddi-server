@@ -12,7 +12,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<?>> handleExceptions(RuntimeException exception) {
 
-        log.error(exception.getMessage());
+        log.error("Exception occurred:", exception); // 스택 트레이스 정보를 포함한 로깅
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.errorResponse(exception.getMessage()));
     }
