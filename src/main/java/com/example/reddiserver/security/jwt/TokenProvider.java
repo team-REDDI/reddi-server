@@ -76,7 +76,6 @@ public class TokenProvider implements InitializingBean {
                     .build();
 
             refreshTokenRepository.save(refreshToken);
-            System.out.println("test");
         }
 
         return TokenDto.builder()
