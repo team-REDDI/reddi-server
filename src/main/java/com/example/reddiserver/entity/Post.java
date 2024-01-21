@@ -24,7 +24,7 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post")
     private List<PostTag> postTags = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // 연관관계 주인
     @JoinColumn(name = "brand_id")
     private Brand brand;
 

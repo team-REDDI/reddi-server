@@ -1,5 +1,6 @@
 package com.example.reddiserver.dto.brand.response;
 
+import com.example.reddiserver.dto.post.response.PostResponseDto;
 import com.example.reddiserver.entity.Brand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
