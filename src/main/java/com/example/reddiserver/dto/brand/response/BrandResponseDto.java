@@ -14,7 +14,7 @@ public class BrandResponseDto {
 	private Long id;
 	private String name;
 	private List<BrandTagDto> brandTags;
-	private String imageUrl;
+	private String cover_url;
 	private String notion_page_url;
 	private String notion_page_created_time;
 	private String notion_page_last_edited_time;
@@ -24,7 +24,7 @@ public class BrandResponseDto {
 		this.id = brand.getId();
 		this.brandTags = BrandTagDto.convertToDtoList(brand.getBrandTags());
 		this.name = brand.getName();
-		this.imageUrl = brand.getImage_url();
+		this.cover_url = brand.getCover_url();
 		this.notion_page_url = brand.getNotion_page_url();
 		this.notion_page_created_time = brand.getNotion_page_created_time();
 		this.notion_page_last_edited_time = brand.getNotion_page_last_edited_time();

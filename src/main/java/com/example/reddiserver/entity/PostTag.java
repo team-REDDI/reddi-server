@@ -1,13 +1,13 @@
 package com.example.reddiserver.entity;
 
 import com.example.reddiserver.entity.base.BaseTimeEntity;
+import com.example.reddiserver.entity.enums.PostTagType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// 연결테이블
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,13 +21,17 @@ public class PostTag extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne
-    @JoinColumn(name = "post_property_id")
-    private PostProperty postProperty;
+    @Enumerated(EnumType.STRING)
+    private PostTagType postTagType;
+    // 기업, 마케팅_종류, 산업, 타겟층
+
+    @Column
+    private String tag;
 
     @Builder
-    public PostTag(Post post, PostProperty postProperty) {
+    public PostTag(Post post, PostTagType postTagType, String tag) {
         this.post = post;
-        this.postProperty = postProperty;
+        this.postTagType = postTagType;
+        this.tag = tag;
     }
 }

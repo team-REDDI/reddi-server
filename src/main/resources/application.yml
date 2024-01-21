@@ -6,7 +6,7 @@ spring:
     import: optional:file:.env.local[.properties]
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
 ---
 spring:
@@ -16,7 +16,7 @@ spring:
     import: optional:file:.env.dev[.properties]
   jpa:
     hibernate:
-      ddl-auto: update # 추후 수정
+      ddl-auto: create # 추후 수정
 ---
 
 # default 공통 설정
@@ -70,5 +70,7 @@ notion:
     key: ${NOTION_API_KEY}
   brandDB:
     id: ${NOTION_BRAND_DB_ID}
+  marketingDB:
+    id: ${NOTION_MARKETING_DB_ID}
 
 

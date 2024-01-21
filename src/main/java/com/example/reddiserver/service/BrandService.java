@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +20,6 @@ public class BrandService {
 	public List<BrandResponseDto> getBrandList() {
 		List<Brand> brands = brandRepository.findAll();
 		List<BrandResponseDto> brandResponseDtos = new ArrayList<>();
-
-		System.out.println("111");
 
 		for (Brand brand : brands) {
 			brandResponseDtos.add(new BrandResponseDto(brand));

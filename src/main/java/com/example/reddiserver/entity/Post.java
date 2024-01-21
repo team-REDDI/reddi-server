@@ -2,17 +2,15 @@ package com.example.reddiserver.entity;
 
 import com.example.reddiserver.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
 @Table(name = "posts")
 public class Post extends BaseTimeEntity {
 
@@ -34,16 +32,26 @@ public class Post extends BaseTimeEntity {
     private String title;
 
     @Column
-    private String image_url;
+    private String subtitle;
 
-    @Column(nullable = false, unique = true)
+    @Column
+    private String description;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String cover_url;
+
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
-    @Builder
-    public Post(Brand brand, String title, String image_url, String content) {
-        this.brand = brand;
-        this.title = title;
-        this.image_url = image_url;
-        this.content = content;
-    }
+    @Column
+    private String notion_page_id;
+
+    @Column
+    private String notion_page_url;
+
+    @Column
+    private String notion_page_created_time;
+
+    @Column
+    private String notion_page_last_edited_time;
 }
