@@ -56,13 +56,11 @@ jobs:
           script: |
             
             cd /home/ubuntu/
-            
-            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com
-            
+                        
             ## docker-compose 실행
             sudo chmod 666 /var/run/docker.sock
             sudo docker rm -f $(docker ps -qa)
-            sudo docker pull 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
+            docker pull 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
             docker compose -f docker-compose-dev.yml up -d
             docker image prune -f
 
