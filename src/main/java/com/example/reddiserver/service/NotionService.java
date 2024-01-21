@@ -6,6 +6,7 @@ import com.example.reddiserver.entity.enums.BrandTagType;
 import com.example.reddiserver.repository.BrandRepository;
 import com.example.reddiserver.repository.BrandTagRepository;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -29,8 +30,9 @@ public class NotionService {
 	private final ObjectMapper objectMapper;
 	private final BrandRepository brandRepository;
 	private final BrandTagRepository brandTagRepository;
+	private final EntityManager em;
 
-	public NotionService(WebClient.Builder webClientBuilder, @Value("${notion.api.key}") String NOTION_API_KEY, ObjectMapper objectMapper, BrandRepository brandRepository, BrandTagRepository brandTagRepository) {
+	public NotionService(WebClient.Builder webClientBuilder, @Value("${notion.api.key}") String NOTION_API_KEY, ObjectMapper objectMapper, BrandRepository brandRepository, BrandTagRepository brandTagRepository, EntityManager em) {
 		this.webClient = webClientBuilder.
 				baseUrl("https://api.notion.com/v1")
 				.defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + NOTION_API_KEY)
@@ -41,6 +43,7 @@ public class NotionService {
 		this.objectMapper = objectMapper;
 		this.brandRepository = brandRepository;
 		this.brandTagRepository = brandTagRepository;
+		this.em = em;
 	}
 
 	// 브랜드 database 순회하면서 브랜드 페이지 Id 추출
@@ -54,7 +57,11 @@ public class NotionService {
 			List<String> ids = new ArrayList<>();
 
 			for (JsonNode resultNode : response.get("results")) {
-				if (resultNode.has("id") && resultNode.get("id").isTextual()) {
+
+				JsonNode isPublishedNode = resultNode.get("properties").get("게시여부").get("select");
+
+				// 게시여부가 Published인 경우에만 브랜드 페이지 Id 추출
+				if (!isPublishedNode.isNull() && isPublishedNode.get("name").asText().equals("Published")){
 					ids.add(resultNode.get("id").asText());
 				}
 			}
@@ -182,6 +189,16 @@ public class NotionService {
 				.retrieve()
 				.bodyToMono(JsonNode.class)
 				.block();
+	}
+
+	// brand, brand_tags 테이블 초기화
+	@Transactional
+	public void deleteAll() {
+		brandTagRepository.deleteAll();
+		brandRepository.deleteAll();
+
+		em.createNativeQuery("ALTER TABLE brands AUTO_INCREMENT = 1").executeUpdate();
+		em.createNativeQuery("ALTER TABLE brand_tags AUTO_INCREMENT = 1").executeUpdate();
 	}
 
 }
