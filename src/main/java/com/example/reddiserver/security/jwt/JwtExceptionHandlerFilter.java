@@ -1,6 +1,5 @@
 package com.example.reddiserver.security.jwt;
 
-import com.example.reddiserver.dto.security.response.JwtErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -9,7 +8,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -31,17 +29,5 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
         } catch (IllegalArgumentException e) {
             throw new JwtException("Jwt 토큰이 잘못되었습니다.", e);
         }
-    }
-
-    public void setErrorResponse(HttpStatus status, HttpServletResponse response, Throwable e) throws IOException {
-        response.setStatus(status.value());
-        response.setContentType("application/json; charset=UTF-8");
-
-        response.getWriter().write(
-                JwtErrorResponse.of(
-                        HttpServletResponse.SC_UNAUTHORIZED,
-                        e.getMessage()
-                ).convertToJson()
-        );
     }
 }
