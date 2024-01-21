@@ -22,7 +22,8 @@ public class BrandService {
 		List<BrandResponseDto> brandResponseDtos = new ArrayList<>();
 
 		for (Brand brand : brands) {
-			brandResponseDtos.add(new BrandResponseDto(brand));
+			brandResponseDtos.add(BrandResponseDto.from(brand));
+
 		}
 
 		return brandResponseDtos;
@@ -30,7 +31,7 @@ public class BrandService {
 
 	public BrandContentsResponseDto getBrandById(Long id) {
 		Brand brand = brandRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 브랜드가 없습니다. id=" + id));
-		return new BrandContentsResponseDto(brand);
+		return BrandContentsResponseDto.from(brand);
 	}
 
 

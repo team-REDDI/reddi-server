@@ -17,8 +17,10 @@ public class BrandContentsResponseDto {
 	@JsonRawValue
 	private String content;
 
-	public BrandContentsResponseDto(Brand brand) {
-		this.id = brand.getId();
-		this.content = brand.getContent();
+	public static BrandContentsResponseDto from(Brand brand) {
+		BrandContentsResponseDto brandContentsResponseDto = new BrandContentsResponseDto();
+		brandContentsResponseDto.setId(brand.getId());
+		brandContentsResponseDto.setContent(brand.getContent());
+		return brandContentsResponseDto;
 	}
 }
