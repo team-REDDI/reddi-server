@@ -61,6 +61,8 @@ public class NotionService {
 	// brand, brand_tags 테이블 초기화
 	@Transactional
 	public void deleteAll() {
+		postTagRepository.deleteAll();
+		postRepository.deleteAll();
 		brandTagRepository.deleteAll();
 		brandRepository.deleteAll();
 
