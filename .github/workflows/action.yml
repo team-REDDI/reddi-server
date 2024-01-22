@@ -56,6 +56,8 @@ jobs:
           script: |
             
             cd /home/ubuntu/
+            
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com
                         
             ## docker-compose 실행
             sudo chmod 666 /var/run/docker.sock
