@@ -22,8 +22,7 @@ public class NotionController {
 
 	private final NotionService notionService;
 
-	@Hidden
-	@Operation(summary = "[테스트용] 노션 api 호출해서 자체 DB 갱신")
+	@Operation(summary = "[수동갱신] 노션 api 호출해서 DB 갱신")
 	@GetMapping("/update")
 	public ApiResponse<?> getNotionData() {
 
