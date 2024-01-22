@@ -1,13 +1,17 @@
 package com.example.reddiserver.controller;
 
 import com.example.reddiserver.common.ApiResponse;
+import com.example.reddiserver.dto.brand.response.BrandResponseDto;
 import com.example.reddiserver.dto.post.response.PostContentsResponseDto;
 import com.example.reddiserver.dto.post.response.PostResponseDto;
 import com.example.reddiserver.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,8 +24,8 @@ public class PostController {
 
 	@Operation(summary = "포스트(마케팅) 리스트 조회")
 	@GetMapping("/")
-	public ApiResponse<List<PostResponseDto>> getPostList() {
-		List<PostResponseDto> postList = postService.getPostList();
+	public ApiResponse<Page<PostResponseDto>> getPostList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+		Page<PostResponseDto> postList = postService.getPostList(PageRequest.of(page, size));
 		return ApiResponse.successResponse(postList);
 	}
 

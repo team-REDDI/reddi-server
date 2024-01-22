@@ -5,6 +5,8 @@ import com.example.reddiserver.dto.brand.response.BrandResponseDto;
 import com.example.reddiserver.entity.Brand;
 import com.example.reddiserver.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,16 +19,9 @@ import java.util.List;
 public class BrandService {
 	private final BrandRepository brandRepository;
 
-	public List<BrandResponseDto> getBrandList() {
-		List<Brand> brands = brandRepository.findAll();
-		List<BrandResponseDto> brandResponseDtos = new ArrayList<>();
-
-		for (Brand brand : brands) {
-			brandResponseDtos.add(BrandResponseDto.from(brand));
-
-		}
-
-		return brandResponseDtos;
+	public Page<BrandResponseDto> getBrandList(Pageable pageable) {
+		Page<Brand> brandPage = brandRepository.findAllBrands(pageable);
+		return brandPage.map(BrandResponseDto::from);
 	}
 
 	public BrandContentsResponseDto getBrandById(Long id) {

@@ -46,6 +46,7 @@ spring:
           google:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
+#            redirectUri: https://reddi-client.vercel.app/callback
             scope: profile, email
   data:
     redis:
