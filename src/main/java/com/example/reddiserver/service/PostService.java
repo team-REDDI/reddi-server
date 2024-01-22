@@ -5,6 +5,8 @@ import com.example.reddiserver.dto.post.response.PostResponseDto;
 import com.example.reddiserver.entity.Post;
 import com.example.reddiserver.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,15 +20,9 @@ public class PostService {
 
 	private final PostRepository postRepository;
 
-	public List<PostResponseDto> getPostList() {
-		List<Post> posts = postRepository.findAll();
-		List<PostResponseDto> postResponseDtos = new ArrayList<>();
-
-		for (Post post : posts) {
-			postResponseDtos.add(PostResponseDto.from(post));
-		}
-
-		return postResponseDtos;
+	public Page<PostResponseDto> getPostList(Pageable pageable) {
+		Page<Post> postPage = postRepository.findAllPosts(pageable);
+		return postPage.map(PostResponseDto::from);
 	}
 
 	public PostContentsResponseDto getPostById(Long id) {
