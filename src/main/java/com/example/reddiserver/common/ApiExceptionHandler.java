@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<?>> handleExceptions(RuntimeException exception) {
+    public ResponseEntity<ApiResponse<?>> handleExceptions(Exception exception) {
 
         log.error("Exception occurred:", exception); // 스택 트레이스 정보를 포함한 로깅
 

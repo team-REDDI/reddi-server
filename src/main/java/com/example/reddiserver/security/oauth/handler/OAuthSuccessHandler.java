@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -16,16 +18,21 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    // 구글 설정과 상관없이 프론트 주소로 직접 리다이렉트
+    @Value("${front-redirection-url}")
+    private String frontRedirectionUrl;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         TokenDto tokenDto = tokenProvider.createAccessToken(authentication);
 
-        String targetUrl = UriComponentsBuilder.fromUriString(getDefaultTargetUrl())
+        String targetUrl = UriComponentsBuilder.fromUriString(frontRedirectionUrl)
                 .queryParam("access", tokenDto.getAccessToken())
                 .queryParam("refresh", tokenDto.getRefreshToken())
                 .build().toUriString();
