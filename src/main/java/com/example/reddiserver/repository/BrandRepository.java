@@ -16,4 +16,7 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
 
 	@Query("SELECT b FROM Brand b WHERE b.notion_page_id = :notion_page_id")
 	Brand findBrandByNotion_page_id(@Param("notion_page_id") String notion_page_id);
+
+	@Query("SELECT b FROM Brand b ORDER BY b.view_count DESC, b.name ASC")
+	List<Brand> findTopNByOrderByViewCountDescAndNameAsc(Pageable pageable);
 }

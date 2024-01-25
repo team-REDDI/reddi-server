@@ -92,4 +92,12 @@ public class PostController {
 
 		return ApiResponse.successResponse(response);
 	}
+
+	@Operation(summary = "마케팅(포스트) TOP N 조회")
+	@Parameter(name = "n", description = "상위 n개")
+	@GetMapping("/top")
+	public ApiResponse<List<PostResponseDto>> getTopNPosts(@RequestParam(defaultValue = "10") int n) {
+		List<PostResponseDto> topNPosts = postService.getTopNPosts(n);
+		return ApiResponse.successResponse(topNPosts);
+	}
 }
