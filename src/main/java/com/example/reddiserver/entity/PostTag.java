@@ -3,15 +3,17 @@ package com.example.reddiserver.entity;
 import com.example.reddiserver.entity.base.BaseTimeEntity;
 import com.example.reddiserver.entity.enums.PostTagType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "post_tags")
+@DynamicInsert
+@DynamicUpdate
 public class PostTag extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -26,8 +26,6 @@ public class NotionController {
 	@GetMapping("/update")
 	public ApiResponse<?> getNotionData() {
 
-		// DB init
-		notionService.deleteAll();
 
 		List<String> brandPageIds = notionService.getBrandPageIds();
 		notionService.getBrandPageContents(brandPageIds);
