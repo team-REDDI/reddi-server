@@ -14,6 +14,7 @@ import java.util.List;
 public class BrandResponseDto {
 	private Long id;
 	private String name;
+	private Long view_count;
 	private List<BrandTagDto> brandTags;
 	private String cover_url;
 	private String notion_page_url;
@@ -25,6 +26,7 @@ public class BrandResponseDto {
 		BrandResponseDto brandResponseDto = new BrandResponseDto();
 		brandResponseDto.setId(brand.getId());
 		brandResponseDto.setName(brand.getName());
+		brandResponseDto.setView_count(brand.getView_count());
 		brandResponseDto.setBrandTags(BrandTagDto.convertToDtoList(brand.getBrandTags()));
 		brandResponseDto.setCover_url(brand.getCover_url());
 		brandResponseDto.setNotion_page_url(brand.getNotion_page_url());

@@ -17,6 +17,7 @@ public class PostResponseDto {
 	private String title;
 	private String subtitle;
 	private String description;
+	private Long view_count;
 	private List<PostTagDto> postTags;
 	private String cover_url;
 	private String notion_page_url;
@@ -30,6 +31,7 @@ public class PostResponseDto {
 		postResponseDto.setTitle(post.getTitle());
 		postResponseDto.setSubtitle(post.getSubtitle());
 		postResponseDto.setDescription(post.getDescription());
+		postResponseDto.setView_count(post.getView_count());
 		postResponseDto.setPostTags(PostTagDto.convertToDtoList(post.getPostTags()));
 		postResponseDto.setCover_url(post.getCover_url());
 		postResponseDto.setNotion_page_url(post.getNotion_page_url());

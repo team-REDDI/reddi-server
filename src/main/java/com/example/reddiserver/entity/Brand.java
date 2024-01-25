@@ -3,6 +3,9 @@ package com.example.reddiserver.entity;
 import com.example.reddiserver.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +15,17 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name = "brands")
+@DynamicInsert
+@DynamicUpdate
 public class Brand extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "brand")
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "brand")
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
     private List<BrandTag> brandTags = new ArrayList<>();
 
     @Column
@@ -31,6 +36,10 @@ public class Brand extends BaseTimeEntity {
 
     @Column(columnDefinition = "LONGTEXT")
     private String content;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private Long view_count;
 
     @Column
     private String notion_page_id;
@@ -44,4 +53,7 @@ public class Brand extends BaseTimeEntity {
     @Column
     private String notion_page_last_edited_time;
 
+    public void increaseViewCount() {
+        this.view_count++;
+    }
 }

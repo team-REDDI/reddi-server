@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -29,5 +30,12 @@ public class BrandService {
 		return BrandContentsResponseDto.from(brand);
 	}
 
+	@Transactional
+	public Long increaseViewCount(Long id) {
+		Brand brand = brandRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 브랜드가 없습니다. id=" + id));
+		brand.increaseViewCount();
+
+		return brand.getView_count();
+	}
 
 }
