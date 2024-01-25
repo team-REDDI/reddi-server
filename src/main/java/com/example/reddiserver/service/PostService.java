@@ -1,5 +1,6 @@
 package com.example.reddiserver.service;
 
+import com.example.reddiserver.dto.brand.response.BrandResponseDto;
 import com.example.reddiserver.dto.post.response.PostContentsResponseDto;
 import com.example.reddiserver.dto.post.response.PostResponseDto;
 import com.example.reddiserver.entity.Brand;
@@ -7,6 +8,7 @@ import com.example.reddiserver.entity.Post;
 import com.example.reddiserver.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,5 +39,15 @@ public class PostService {
 		post.increaseViewCount();
 
 		return post.getView_count();
+	}
+
+	public List<PostResponseDto> getTopNPosts(int topN) {
+		List<Post> topNPosts = postRepository.findTopNByOrderByViewCountDescAndNameAsc(PageRequest.of(0, topN));
+
+		List<PostResponseDto> topNPostList = new ArrayList<>();
+		for (Post post : topNPosts) {
+			topNPostList.add(PostResponseDto.from(post));
+		}
+		return topNPostList;
 	}
 }

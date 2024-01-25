@@ -6,7 +6,9 @@ import com.example.reddiserver.entity.Brand;
 import com.example.reddiserver.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,4 +40,13 @@ public class BrandService {
 		return brand.getView_count();
 	}
 
+	public List<BrandResponseDto> getTopNBrands(int topN) {
+		List<Brand> topNBrands = brandRepository.findTopNByOrderByViewCountDescAndNameAsc(PageRequest.of(0, topN));
+
+		List<BrandResponseDto> topNBrandList = new ArrayList<>();
+		for (Brand brand : topNBrands) {
+			topNBrandList.add(BrandResponseDto.from(brand));
+		}
+		return topNBrandList;
+	}
 }
