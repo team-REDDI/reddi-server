@@ -11,6 +11,7 @@ import com.example.reddiserver.repository.BrandTagRepository;
 import com.example.reddiserver.repository.PostRepository;
 import com.example.reddiserver.repository.PostTagRepository;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.swagger.v3.core.util.Json;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,10 @@ public class NotionService {
 
 	@Value("${notion.marketingDB.id}")
 	private String MARKETING_DB_ID;
+
+	@Value("${notion.homeDB.id}")
+	private String HOME_DB_ID;
+
 
 	private final WebClient webClient;
 	private final BrandRepository brandRepository;
@@ -490,4 +495,81 @@ public class NotionService {
 
 		}
 	}
+
+	public List<String> getHomeCuratingPageIds() {
+		JsonNode response = webClient.post().uri("/databases/"+HOME_DB_ID+"/query").body(BodyInserters.empty())
+				.retrieve()
+				.bodyToMono(JsonNode.class)
+				.block();
+
+		if (response != null && response.has("results") && response.get("results").isArray()) {
+			List<String> ids = new ArrayList<>();
+
+			for (JsonNode resultNode : response.get("results")) {
+				ids.add(resultNode.get("id").asText());
+			}
+
+			return ids;
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	public List<Map<String, Object>> getHomeCuratingPageContents(List<String> HomeCuratingPageIds){
+
+		List<Map<String, Object>> dataList = new ArrayList<>();
+
+		for (String HomeCuratingPageId : HomeCuratingPageIds) {
+			try {
+				// fetch page metadata
+				JsonNode pageMetadata = fetchPageMetadata(HomeCuratingPageId);
+
+				// Extract properties information
+				JsonNode propertiesNode = pageMetadata.get("properties");
+
+				// 태그 추출 후 저장
+				if (propertiesNode != null && propertiesNode.isObject()) {
+
+					List<Post> relatedPosts = new ArrayList<>();
+
+					propertiesNode.fieldNames().forEachRemaining(fieldName -> {
+						if (fieldName.equals("마케팅")) {
+							JsonNode relation = propertiesNode.get(fieldName).get("relation");
+
+							if (relation != null && relation.isArray()) {
+								for (JsonNode r_item : relation) {
+									String post_id = r_item.get("id").asText();
+
+									// 해당 post_id로 post 가져오기
+									Post post = postRepository.findPostByNotion_page_id(post_id);
+									relatedPosts.add(post);
+								}
+							}
+						}
+
+					});
+
+					// 큐레이팅 타이틀 추출
+					String title = propertiesNode.get("이름").get("title").get(0).get("text").get("content").asText();
+
+					Map<String, Object> data = new HashMap<>();
+					data.put("title", title);
+					data.put("relatedPosts", relatedPosts);
+					dataList.add(data);
+
+				} else {
+					log.error("propertiesNode is null or not an object");
+				}
+
+			} catch (Exception e) {
+				log.error("Error while fetching page metadata for pageId: {}", HomeCuratingPageId, e); // 스택트레이스도 같이 출력
+				throw e;
+			}
+		}
+
+		return dataList;
+
+	}
+
+
 }

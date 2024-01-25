@@ -63,4 +63,8 @@ public class Post extends BaseTimeEntity {
 
     @Column
     private String notion_page_last_edited_time;
+
+    public void increaseViewCount() {
+        this.view_count++;
+    }
 }

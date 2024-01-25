@@ -82,5 +82,7 @@ notion:
     id: ${NOTION_BRAND_DB_ID}
   marketingDB:
     id: ${NOTION_MARKETING_DB_ID}
+  homeDB:
+    id: ${NOTION_HOME_DB_ID}
 
 front-redirection-url : ${FRONT_REDIRECTION_URL}
