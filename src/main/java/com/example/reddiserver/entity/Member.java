@@ -34,8 +34,11 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String email;
+
     @Column
-    private String imageUrl;
+    private String profileImageUrl;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -46,10 +49,11 @@ public class Member extends BaseTimeEntity {
     private Authority authority;
 
     @Builder
-    public Member(String providerId, String name, String imageUrl, ProviderType providerType, Authority authority) {
+    public Member(String providerId, String name, String email, String profileImageUrl, ProviderType providerType, Authority authority) {
         this.providerId = providerId;
         this.name = name;
-        this.imageUrl = imageUrl;
+        this.email = email;
+        this.profileImageUrl = profileImageUrl;
         this.providerType = providerType;
         this.authority = authority;
     }
