@@ -1,4 +1,4 @@
-package com.example.reddiserver.security.config;
+package com.example.reddiserver.config;
 
 import com.example.reddiserver.security.jwt.JwtAuthenticationFilter;
 import com.example.reddiserver.security.jwt.JwtExceptionHandlerFilter;

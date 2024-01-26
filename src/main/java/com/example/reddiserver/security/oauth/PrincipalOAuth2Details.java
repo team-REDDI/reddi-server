@@ -43,7 +43,7 @@ public class PrincipalOAuth2Details implements OAuth2User {
     }
 
     @Override
-    public String getName() {
+    public String getName() { // principal.getName() 에서 getName() 은 providerId 를 의미
         return member.getProviderId();
     }
 }
