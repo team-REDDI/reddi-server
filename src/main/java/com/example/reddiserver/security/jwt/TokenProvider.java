@@ -5,6 +5,7 @@ import com.example.reddiserver.entity.RefreshToken;
 import com.example.reddiserver.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -16,6 +17,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.*;
@@ -25,6 +27,9 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
+
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer";
     private static final String AUTHORITIES_KEY = "auth";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30L;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 60 * 60 * 24 * 3L;
@@ -110,18 +115,32 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
-    public boolean validateAccessToken(String accessToken) {
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+
+        return null;
+    }
+
+    public boolean validateAccessToken(String accessToken){
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
             return true;
         } catch (io.jsonwebtoken.security.SignatureException | MalformedJwtException e) {
-            log.error("잘못된 JWT 서명입니다");
+            String msg = "잘못된 JWT 서명입니다";
+            log.error(msg);
         } catch (ExpiredJwtException e) {
-            log.error("만료된 JWT 토큰입니다");
+            String msg = "만료된 JWT 토큰입니다";
+            log.error(msg);
         } catch (UnsupportedJwtException e) {
-            log.error("지원되지 않는 JWT 토큰입니다");
+            String msg = "지원되지 않는 JWT 토큰입니다";
+            log.error(msg);
         } catch (IllegalArgumentException e) {
-            log.error("Jwt 토큰이 잘못되었습니다");
+            String msg = "JWT 토큰이 잘못되었습니다";
+            log.error(msg);
         }
         return false;
     }

@@ -16,6 +16,7 @@ spring:
             client-secret: ${CLIENT_SECRET}
 #            redirectUri: http://localhost:8080/login/oauth2/code/google
             scope: profile, email
+front-redirection-url: ${FRONT_LOCAL_REDIRECTION_URL}
 
 ---
 spring:
@@ -33,8 +34,9 @@ spring:
           google:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
-#            redirectUri: http://localhost:8081/login/oauth2/code/google
+#            redirectUri: http://localhost:8081/login/oauth2/code/google (서버 포트)
             scope: profile, email
+front-redirection-url: ${FRONT_PROD_REDIRECTION_URL}
 ---
 
 # default 공통 설정
@@ -84,5 +86,3 @@ notion:
     id: ${NOTION_MARKETING_DB_ID}
   homeDB:
     id: ${NOTION_HOME_DB_ID}
-
-front-redirection-url : ${FRONT_REDIRECTION_URL}
