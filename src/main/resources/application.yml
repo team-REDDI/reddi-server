@@ -34,7 +34,7 @@ spring:
           google:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
-            redirectUri: ${SERVER_PROD_API_URL}/login/oauth2/code/google
+#            redirectUri: ${SERVER_PROD_API_URL}/login/oauth2/code/google
             scope: profile, email
 front-redirection-url: ${FRONT_PROD_REDIRECTION_URL}
 ---
