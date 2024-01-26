@@ -24,17 +24,17 @@ import java.util.List;
 public class SwaggerConfig {
     private static final String SECURITY_SCHEME_NAME = "authorization";	// 추가
 
-    @Bean
-    @Profile("local")
-    public OpenAPI localOpenAPIBuilder() {
-        return new OpenAPI().addServersItem(new Server().url("http://localhost:8080"));
-    }
-
-    @Bean
-    @Profile("dev")
-    public OpenAPI devOpenAPIBuilder() {
-        return new OpenAPI().addServersItem(new Server().url("https://api.reddi.kr"));
-    }
+//    @Bean
+//    @Profile("local")
+//    public OpenAPI localOpenAPIBuilder() {
+//        return new OpenAPI().addServersItem(new Server().url("http://localhost:8080"));
+//    }
+//
+//    @Bean
+//    @Profile("dev")
+//    public OpenAPI devOpenAPIBuilder() {
+//        return new OpenAPI().addServersItem(new Server().url("https://api.reddi.kr"));
+//    }
     @Bean
     public OpenAPI openAPI() {
         Info info = new Info()
