@@ -14,7 +14,7 @@ public class NotionDataFetchScheduler {
 
 	private final NotionService notionService;
 
-	@Scheduled(cron = "0 0 */1 * * *")  // 1시간마다 실행
+	@Scheduled(cron = "0 *30 * * * *")  // 30분마다 수행
 	public void fetchNotionData() {
 		List<String> brandPageIds = notionService.getBrandPageIds();
 		notionService.getBrandPageContents(brandPageIds);
