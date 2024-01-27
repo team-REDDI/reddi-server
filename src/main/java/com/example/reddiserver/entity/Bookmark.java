@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +16,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "bookmarks")
+@DynamicInsert
+@DynamicUpdate
 public class Bookmark extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "bookmark")
+    @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL)
     private List<BookmarkPost> bookmarkPosts = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY) // 연관관계 주인

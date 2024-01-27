@@ -27,6 +27,8 @@ public class PrincipalOAuth2DetailsService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, oAuth2User.getAttributes());
 
+        System.out.println("oAuth2User.getAttributes() = " + oAuth2User.getAttributes());
+
         Member member = memberRepository.findByProviderId(oAuth2UserInfo.getProviderId()).orElse(null);
         if (member == null) {
             member = signup(oAuth2UserInfo);
@@ -39,6 +41,8 @@ public class PrincipalOAuth2DetailsService extends DefaultOAuth2UserService {
         Member member = Member.builder()
                 .providerId(oAuth2UserInfo.getProviderId())
                 .name(oAuth2UserInfo.getName())
+                .email(oAuth2UserInfo.getEmail())
+                .profileImageUrl(oAuth2UserInfo.getProfileImage())
                 .providerType(oAuth2UserInfo.getProviderType())
                 .authority(Authority.ROLE_USER)
                 .build();

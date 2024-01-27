@@ -7,6 +7,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            redirectUri: http://localhost:8080/login/oauth2/code/google
+            scope: profile, email
+front-redirection-url: ${FRONT_LOCAL_REDIRECTION_URL}
 
 ---
 spring:
@@ -17,6 +27,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update # 추후 수정
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            redirectUri: ${SERVER_PROD_API_URL}/login/oauth2/code/google
+            scope: profile, email
+front-redirection-url: ${FRONT_PROD_REDIRECTION_URL}
 ---
 
 # default 공통 설정
@@ -39,15 +59,6 @@ spring:
         format_sql: true
   jwt:
     secret: ${JWT_SECRET}
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${CLIENT_ID}
-            client-secret: ${CLIENT_SECRET}
-#            redirectUri: https://reddi-client.vercel.app/callback
-            scope: profile, email
   data:
     redis:
       host: ${REDIS_HOST}
@@ -73,5 +84,5 @@ notion:
     id: ${NOTION_BRAND_DB_ID}
   marketingDB:
     id: ${NOTION_MARKETING_DB_ID}
-
-
+  homeDB:
+    id: ${NOTION_HOME_DB_ID}

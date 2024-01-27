@@ -3,6 +3,9 @@ package com.example.reddiserver.entity;
 import com.example.reddiserver.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +15,18 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name = "posts")
+@DynamicInsert
+@DynamicUpdate
 public class Post extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<BookmarkPost> bookmarkPosts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostTag> postTags = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY) // 연관관계 주인
@@ -44,6 +49,10 @@ public class Post extends BaseTimeEntity {
     private String content;
 
     @Column
+    @ColumnDefault("0")
+    private Long view_count;
+
+    @Column
     private String notion_page_id;
 
     @Column
@@ -54,4 +63,8 @@ public class Post extends BaseTimeEntity {
 
     @Column
     private String notion_page_last_edited_time;
+
+    public void increaseViewCount() {
+        this.view_count++;
+    }
 }

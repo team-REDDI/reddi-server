@@ -1,4 +1,4 @@
-package com.example.reddiserver.security.config;
+package com.example.reddiserver.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
