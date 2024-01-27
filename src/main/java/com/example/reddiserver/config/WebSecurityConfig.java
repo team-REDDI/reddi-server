@@ -45,11 +45,6 @@ public class WebSecurityConfig {
                 .exceptionHandling(authenticationManager -> authenticationManager
                         .accessDeniedHandler(jwtAccessDeniedHandler)
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .oauth2Login(oauth2LoginConfigurer -> oauth2LoginConfigurer
-                        .failureHandler(oAuthFailureHandler)
-                        .successHandler(oAuthSuccessHandler)
-                        .userInfoEndpoint()
-                        .userService(customOAuth2UserService))
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/static/**", "/resources/**", "/css/**", "/js/**", "/images/**", "/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/**").permitAll()
