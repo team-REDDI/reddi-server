@@ -86,3 +86,6 @@ notion:
     id: ${NOTION_MARKETING_DB_ID}
   homeDB:
     id: ${NOTION_HOME_DB_ID}
+
+chatgpt:
+  api-key: ${OPENAI_API_KEY}
