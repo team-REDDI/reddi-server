@@ -48,7 +48,9 @@ dependencies {
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
 
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.4'
 }
 
 tasks.named('test') {
