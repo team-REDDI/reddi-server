@@ -26,8 +26,8 @@ public class Brand extends BaseTimeEntity {
     @Column
     private String name;
 
-    @Column
-    private String image_url;
+    @Column(columnDefinition = "LONGTEXT")
+    private String cover_url;
 
     @Column(columnDefinition = "LONGTEXT")
     private String content;
@@ -44,15 +44,4 @@ public class Brand extends BaseTimeEntity {
     @Column
     private String notion_page_last_edited_time;
 
-
-    @Builder
-    public Brand(String name, String image_url, String content, String notion_page_id, String notion_page_url, String notion_page_created_time, String notion_page_last_edited_time) {
-        this.name = name;
-        this.image_url = image_url;
-        this.content = content;
-        this.notion_page_id = notion_page_id;
-        this.notion_page_url = notion_page_url;
-        this.notion_page_created_time = notion_page_created_time;
-        this.notion_page_last_edited_time = notion_page_last_edited_time;
-    }
 }

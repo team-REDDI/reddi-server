@@ -21,8 +21,6 @@ public class BrandTagDto {
 		this.tag = brandTag.getTag();
 	}
 
-	// Getters and setters (if needed)
-
 	public static List<BrandTagDto> convertToDtoList(List<BrandTag> brandTags) {
 		return brandTags.stream()
 				.map(BrandTagDto::new)
