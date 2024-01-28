@@ -13,12 +13,14 @@ import static com.example.reddiserver.dto.brand.response.BrandTagDto.convertToDt
 @Getter
 @Builder
 public class SearchBrands {
+    private Long id;
     private String name;
     private List<BrandTagDto> brandTags;
     private String coverUrl;
 
     public static SearchBrands convertBrandToSearchBrands(Brand brand) {
         return SearchBrands.builder()
+                .id(brand.getId())
                 .name(brand.getName())
                 .brandTags(convertToDtoList(brand.getBrandTags()))
                 .coverUrl(brand.getCover_url())

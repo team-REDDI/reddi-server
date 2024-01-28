@@ -12,6 +12,7 @@ import static com.example.reddiserver.dto.post.response.PostTagDto.convertToDtoL
 @Getter
 @Builder
 public class SearchPosts {
+    private Long id;
     private String title;
     private String subtitle;
     private List<PostTagDto> postTags;
@@ -21,6 +22,7 @@ public class SearchPosts {
 
     public static SearchPosts convertPostToSearchPosts(Post post) {
         return SearchPosts.builder()
+                .id(post.getId())
                 .title(post.getTitle())
                 .subtitle(post.getSubtitle())
                 .postTags(convertToDtoList(post.getPostTags()))
