@@ -1,11 +1,10 @@
 package com.example.reddiserver.service;
 
-import com.example.reddiserver.dto.search.response.SearchBrands;
-import com.example.reddiserver.dto.search.response.SearchPosts;
-import com.example.reddiserver.dto.search.response.SearchResponseDto;
+import com.example.reddiserver.dto.search.response.*;
 import com.example.reddiserver.repository.BrandRepository;
 import com.example.reddiserver.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +30,16 @@ public class SearchService {
         return SearchResponseDto.builder()
                 .posts(posts)
                 .brands(brands)
+                .build();
+    }
+
+    public HotPostResponseDto getHotPostList() {
+        List<HotPostInfo> topNPosts = postRepository.findTopNByOrderByViewCountDesc(PageRequest.of(0, 2)).stream()
+                .map(HotPostInfo::from)
+                .collect(Collectors.toList());
+
+        return HotPostResponseDto.builder()
+                .posts(topNPosts)
                 .build();
     }
 }
