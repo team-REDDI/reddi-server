@@ -2,7 +2,10 @@ package com.example.reddiserver.controller;
 
 import com.example.reddiserver.common.ApiResponse;
 import com.example.reddiserver.dto.chatgpt.request.ChatGptRequest;
+import com.example.reddiserver.dto.chatgpt.response.ChatGptCreationResultDto;
+import com.example.reddiserver.dto.chatgpt.response.ChatGptResponse;
 import com.example.reddiserver.service.ChatGptService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +23,7 @@ public class ChatGptController {
 
     @Operation(summary = "ChatGPT로 원하는 브랜드 만들기")
     @PostMapping("/question")
-    public ApiResponse<String> postChat(@RequestBody ChatGptRequest chatGptRequest) {
+    public ApiResponse<ChatGptCreationResultDto> postChat(@RequestBody ChatGptRequest chatGptRequest) throws JsonProcessingException {
         return ApiResponse.successResponse(chatGptService.postChat(chatGptRequest), "AI 브랜딩 성공");
     }
 }
