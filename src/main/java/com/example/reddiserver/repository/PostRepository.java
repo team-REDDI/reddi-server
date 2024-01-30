@@ -21,4 +21,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 	@Query("SELECT p FROM Post p ORDER BY p.view_count DESC, p.title ASC")
 	List<Post> findTopNByOrderByViewCountDescAndNameAsc(Pageable pageable);
+
+	@Query("SELECT p FROM Post p WHERE p.title like :keyword OR p.content like :keyword")
+	Page<Post> findByTitleContainingOrContentContaining(String keyword, Pageable pageable);
+
+	@Query("SELECT p FROM Post p ORDER BY p.view_count DESC")
+	List<Post> findTopNByOrderByViewCountDesc(Pageable pageable);
 }
