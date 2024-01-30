@@ -1,4 +1,4 @@
-package com.example.reddiserver.security.oauth.provider;
+package com.example.reddiserver.auth.oauth.provider;
 
 import com.example.reddiserver.entity.enums.ProviderType;
 
