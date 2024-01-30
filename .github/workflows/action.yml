@@ -42,25 +42,11 @@ jobs:
 
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com
 
-          docker build -t reddi-server-dev .
+          docker build --platform amd64 -t reddi-server-dev .
 
           docker tag reddi-server-dev:latest 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server-dev:latest
 
           docker push 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server-dev:latest
-
-      - name: (main) Build, tag, and push image to Amazon ECR
-        if: github.ref == 'refs/heads/main'
-        run: |
-          # docker image 빌드
-          # ECR push
-
-          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com
-
-          docker build -t reddi-server .
-
-          docker tag reddi-server:latest 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
-
-          docker push 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
 
       - name: (dev) executing remote ssh commands using password
         if: github.ref == 'refs/heads/dev'
@@ -77,10 +63,24 @@ jobs:
             
             ## docker-compose 실행
             sudo chmod 666 /var/run/docker.sock
-            sudo docker rm -f $(sudo docker ps -q --filter "ancestor=533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server-dev:latest" --filter "expose=8081" --filter "expose=6380")
+            sudo docker rm -f $(sudo docker ps -q --filter "expose=8081" --filter "expose=6380")
             docker pull 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server-dev:latest
             docker compose -f docker-compose-dev.yml up -d
             docker image prune -f
+
+      - name: (main) Build, tag, and push image to Amazon ECR
+        if: github.ref == 'refs/heads/main'
+        run: |
+          # docker image 빌드
+          # ECR push
+
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com
+
+          docker build --platform amd64 -t reddi-server .
+
+          docker tag reddi-server:latest 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
+
+          docker push 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
 
       - name: (main) executing remote ssh commands using password
         if: github.ref == 'refs/heads/main'
@@ -98,7 +98,7 @@ jobs:
             ## docker-compose 실행
             sudo chmod 666 /var/run/docker.sock
             # sudo docker rm -f $(docker ps -qa)
-            sudo docker rm -f $(sudo docker ps -q --filter "ancestor=533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest" --filter "expose=8080" --filter "expose=6379")
+            sudo docker rm -f $(sudo docker ps -q --filter "expose=8080" --filter "expose=6379")
             docker pull 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
             docker compose -f docker-compose-prod.yml up -d
             docker image prune -f
