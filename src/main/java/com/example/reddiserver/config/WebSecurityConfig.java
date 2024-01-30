@@ -28,10 +28,10 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .httpBasic(httpBasic -> httpBasic.disable())
-                .formLogin(formLogin -> formLogin.disable())
+//                .httpBasic(httpBasic -> httpBasic.disable())
+//                .formLogin(formLogin -> formLogin.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/static/**", "/resources/**", "/css/**", "/js/**", "/images/**", "/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/static/**", "/resources/**", "/css/**", "/js/**", "/images/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
