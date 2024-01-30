@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   build:
@@ -34,7 +35,22 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: [dev] Build, tag, and push image to Amazon ECR
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          # docker image 빌드
+          # ECR push
+
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com
+
+          docker build -t reddi-server-dev .
+
+          docker tag reddi-server-dev:latest 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server-dev:latest
+
+          docker push 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server-dev:latest
+
+      - name: [main] Build, tag, and push image to Amazon ECR
+        if: github.ref == 'refs/heads/main'
         run: |
           # docker image 빌드
           # ECR push
@@ -47,7 +63,28 @@ jobs:
 
           docker push 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
 
-      - name: executing remote ssh commands using password
+      - name: [dev] executing remote ssh commands using password
+        if: github.ref == 'refs/heads/dev'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            
+            cd /home/ubuntu/
+            
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com
+            
+            ## docker-compose 실행
+            sudo chmod 666 /var/run/docker.sock
+            sudo docker rm -f $(sudo docker ps -q --filter "ancestor=533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server-dev:latest" --filter "expose=8081" --filter "expose=6380")
+            docker pull 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server-dev:latest
+            docker compose -f docker-compose-dev.yml up -d
+            docker image prune -f
+
+      - name: [main] executing remote ssh commands using password
+        if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -61,8 +98,9 @@ jobs:
                         
             ## docker-compose 실행
             sudo chmod 666 /var/run/docker.sock
-            sudo docker rm -f $(docker ps -qa)
+            # sudo docker rm -f $(docker ps -qa)
+            sudo docker rm -f $(sudo docker ps -q --filter "ancestor=533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest" --filter "expose=8080" --filter "expose=6379")
             docker pull 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
-            docker compose -f docker-compose-dev.yml up -d
+            docker compose -f docker-compose-prod.yml up -d
             docker image prune -f
 
