@@ -35,7 +35,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: [dev] Build, tag, and push image to Amazon ECR
+      - name: (dev) Build, tag, and push image to Amazon ECR
         if: github.ref == 'refs/heads/dev'
         run: |
           # docker image 빌드
@@ -49,7 +49,7 @@ jobs:
 
           docker push 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server-dev:latest
 
-      - name: [main] Build, tag, and push image to Amazon ECR
+      - name: (main) Build, tag, and push image to Amazon ECR
         if: github.ref == 'refs/heads/main'
         run: |
           # docker image 빌드
@@ -63,7 +63,7 @@ jobs:
 
           docker push 533267191976.dkr.ecr.ap-northeast-2.amazonaws.com/reddi-server:latest
 
-      - name: [dev] executing remote ssh commands using password
+      - name: (dev) executing remote ssh commands using password
         if: github.ref == 'refs/heads/dev'
         uses: appleboy/ssh-action@master
         with:
@@ -83,7 +83,7 @@ jobs:
             docker compose -f docker-compose-dev.yml up -d
             docker image prune -f
 
-      - name: [main] executing remote ssh commands using password
+      - name: (main) executing remote ssh commands using password
         if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@master
         with:
