@@ -1,7 +1,7 @@
 package com.example.reddiserver.controller;
 
 import com.example.reddiserver.common.ApiResponse;
-import com.example.reddiserver.dto.search.response.HotPostInfo;
+import com.example.reddiserver.dto.search.response.HotKeywordResponseDto;
 import com.example.reddiserver.dto.search.response.HotPostResponseDto;
 import com.example.reddiserver.dto.search.response.SearchResponseDto;
 import com.example.reddiserver.service.SearchService;
@@ -26,8 +26,15 @@ public class SearchController {
     @Operation(summary = "검색")
     @GetMapping("/")
     public ApiResponse<SearchResponseDto> getSearchList(@RequestParam String keyword, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        SearchResponseDto searchResponseDtoList = searchService.getSearchList(keyword, PageRequest.of(page, size));
-        return ApiResponse.successResponse(searchResponseDtoList, "검색");
+        SearchResponseDto searchResponseDto = searchService.getSearchList(keyword, PageRequest.of(page, size));
+        return ApiResponse.successResponse(searchResponseDto, "검색");
+    }
+
+    @Operation(summary = "인기 검색어")
+    @GetMapping("/keyword")
+    public ApiResponse<HotKeywordResponseDto> getKeywordList() {
+        HotKeywordResponseDto keywordResponseDto = searchService.getHotKeywordList();
+        return ApiResponse.successResponse(keywordResponseDto, "인기 검색어 조회");
     }
 
     @Operation(summary = "인기 마케팅 레퍼런스")
