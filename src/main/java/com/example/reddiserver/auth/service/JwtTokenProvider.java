@@ -24,7 +24,7 @@ public class JwtTokenProvider implements InitializingBean {
 
 	private Key key;
 
-	private final Long accessTokenExpiredTime = 1000 * 60L * 60L * 12L; // 유효시간 12시간 (임시 변경)
+	private final Long accessTokenExpiredTime = 1000 * 60L * 60L * 24L; // 유효시간 24시간 (임시 변경)
 	private final Long refreshTokenExpiredTime = 1000 * 60L * 60L * 24L * 14L; // 유효시간 14일
 
 	private final Long shortAccessTokenExpiredTime = 1000 * 60L * 5;  // 유효시간 5분
@@ -37,7 +37,7 @@ public class JwtTokenProvider implements InitializingBean {
 	}
 
 	public String createAccessToken(Map<String, String> payload) {
-		return createJwtToken(payload, shortAccessTokenExpiredTime);
+		return createJwtToken(payload, accessTokenExpiredTime);
 	}
 
 	public String createRefreshToken(Map<String, String> payload) {

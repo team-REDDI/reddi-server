@@ -66,11 +66,11 @@ public class OAuthService {
 		String refreshToken = jwtTokenProvider.createRefreshToken(payload);
 
 		// redis에 저장
-		RefreshToken refreshTokenEntity = new RefreshToken();
-		refreshTokenEntity.setUserId(member.getId());
-		refreshTokenEntity.setRefreshToken(refreshToken);
-
-		refreshTokenRepository.save(refreshTokenEntity);
+//		RefreshToken refreshTokenEntity = new RefreshToken();
+//		refreshTokenEntity.setUserId(member.getId());
+//		refreshTokenEntity.setRefreshToken(refreshToken);
+//
+//		refreshTokenRepository.save(refreshTokenEntity);
 
 		return LoginResponseDto.builder()
 				.accessToken(accessToken)
