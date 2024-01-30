@@ -1,18 +1,12 @@
 package com.example.reddiserver.config;
 
-import com.example.reddiserver.security.jwt.JwtAuthenticationFilter;
-import com.example.reddiserver.security.jwt.JwtExceptionHandlerFilter;
-import com.example.reddiserver.security.jwt.exception.JwtAccessDeniedHandler;
-import com.example.reddiserver.security.jwt.exception.JwtAuthenticationEntryPoint;
-import com.example.reddiserver.security.oauth.handler.OAuthFailureHandler;
-import com.example.reddiserver.security.oauth.handler.OAuthSuccessHandler;
-import com.example.reddiserver.security.oauth.PrincipalOAuth2DetailsService;
+import com.example.reddiserver.auth.filter.JwtRequestFilter;
+import com.example.reddiserver.auth.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,14 +17,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CorsConfigurationSource corsConfigurationSource;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final PrincipalOAuth2DetailsService customOAuth2UserService;
-    private final OAuthSuccessHandler oAuthSuccessHandler;
-    private final OAuthFailureHandler oAuthFailureHandler;
+    private final JwtTokenProvider jwtTokenProvider;
 
 
     @Bean
@@ -42,9 +30,6 @@ public class WebSecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(formLogin -> formLogin.disable())
-                .exceptionHandling(authenticationManager -> authenticationManager
-                        .accessDeniedHandler(jwtAccessDeniedHandler)
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/static/**", "/resources/**", "/css/**", "/js/**", "/images/**", "/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/**").permitAll()
@@ -53,8 +38,9 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 );
 
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtExceptionHandlerFilter, JwtAuthenticationFilter.class);
+        http.addFilterBefore(new JwtRequestFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+
+
 
         return http.build();
     }

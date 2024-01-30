@@ -1,4 +1,16 @@
 package com.example.reddiserver.dto.auth.response;
 
-public record GoogleTokenResponseDto(String access_token, Integer expires_in, String scope, String token_type, String id_token) {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class GoogleTokenResponseDto {
+	public String access_token;
+	public Integer expires_in;
+	public String scope;
+	public String token_type;
+	public String id_token;
 }

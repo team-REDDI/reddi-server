@@ -14,7 +14,7 @@ spring:
           google:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
-            redirectUri: http://localhost:8080/login/oauth2/code/google
+            redirectUri: ${GOOGLE_REDIRECT_URL_LOCAL} # 나중에 수정
             scope: profile, email
 front-redirection-url: ${FRONT_LOCAL_REDIRECTION_URL}
 
@@ -34,9 +34,8 @@ spring:
           google:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
-            redirectUri: ${SERVER_PROD_API_URL}/login/oauth2/code/google
+            redirectUri: ${GOOGLE_REDIRECT_URL_PROD}
             scope: profile, email
-front-redirection-url: ${FRONT_PROD_REDIRECTION_URL}
 ---
 
 # default 공통 설정
