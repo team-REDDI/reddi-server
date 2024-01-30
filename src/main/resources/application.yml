@@ -16,7 +16,6 @@ spring:
             client-secret: ${CLIENT_SECRET}
             redirectUri: ${GOOGLE_REDIRECT_URL_LOCAL} # 나중에 수정
             scope: profile, email
-front-redirection-url: ${FRONT_LOCAL_REDIRECTION_URL}
 
 ---
 spring:
