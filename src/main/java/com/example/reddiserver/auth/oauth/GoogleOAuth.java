@@ -20,8 +20,8 @@ public class GoogleOAuth {
 	private final String GOOGLE_TOKEN_REQUEST_URL = "https://oauth2.googleapis.com/token";
 	private final String GOOGLE_USERINFO_REQUEST_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
 
-	@Value("${spring.security.oauth2.client.registration.google.redirectUri}")
-	private String REDIRECT_URI;
+//	@Value("${spring.security.oauth2.client.registration.google.redirectUri}")
+//	private String REDIRECT_URI;
 
 	@Value("${spring.security.oauth2.client.registration.google.client-id}")
 	private String CLIENT_ID;
@@ -31,12 +31,12 @@ public class GoogleOAuth {
 
 	private final WebClient webClient;
 
-	public GoogleTokenResponseDto requestToken(String code) {
+	public GoogleTokenResponseDto requestToken(String code, String redirectUri) {
 		Map<String, Object> params = Map.of(
 				"code", code,
 				"client_id", CLIENT_ID,
 				"client_secret", CLIENT_SECRET,
-				"redirect_uri", REDIRECT_URI,
+				"redirect_uri", redirectUri,
 				"grant_type", "authorization_code"
 		);
 
