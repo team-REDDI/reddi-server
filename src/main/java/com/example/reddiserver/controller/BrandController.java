@@ -1,5 +1,6 @@
 package com.example.reddiserver.controller;
 
+import com.example.reddiserver.auth.service.OAuthService;
 import com.example.reddiserver.common.ApiResponse;
 import com.example.reddiserver.dto.brand.response.BrandContentsResponseDto;
 import com.example.reddiserver.dto.brand.response.BrandResponseDto;
@@ -7,13 +8,11 @@ import com.example.reddiserver.repository.BrandRepository;
 import com.example.reddiserver.service.BrandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.List;
 public class BrandController {
 
 	private final BrandService brandService;
-	private final BrandRepository brandRepository;
+	private final OAuthService oAuthService;
 
 	@Operation(summary = "브랜드 리스트 조회")
 	@GetMapping("/")
@@ -58,5 +57,32 @@ public class BrandController {
 	public ApiResponse<List<BrandResponseDto>> getTopNBrands(@RequestParam(defaultValue = "10") int n) {
 		List<BrandResponseDto> topNBrands = brandService.getTopNBrands(n);
 		return ApiResponse.successResponse(topNBrands);
+	}
+
+	@SecurityRequirement(name = "Authorization") // 인증 필요한 엔드포인트에 설정
+	@Operation(summary = "브랜드 북마크 토글 (북마크 추가/삭제)")
+	@PutMapping("/bookmark/toggle")
+	public ApiResponse<HashMap<String, Boolean>> toggleBookmarkBrand(@RequestParam Long brandId) {
+
+		Long memberId = oAuthService.getUserId();
+
+		boolean isBookmarked = brandService.toggleBookmarkBrand(memberId, brandId);
+
+		HashMap<String, Boolean> response = new HashMap<>();
+		response.put("is_bookmarked", isBookmarked);
+
+		return ApiResponse.successResponse(response);
+	}
+
+	@SecurityRequirement(name = "Authorization") // 인증 필요한 엔드포인트에 설정
+	@Operation(summary = "유저의 브랜드 북마크 조회")
+	@GetMapping("/bookmark")
+	public ApiResponse<List<BrandResponseDto>> getBookmarkBrands() {
+
+		Long memberId = oAuthService.getUserId();
+
+		List<BrandResponseDto> bookmarkBrands = brandService.getBookmarkBrandList(memberId);
+
+		return ApiResponse.successResponse(bookmarkBrands);
 	}
 }

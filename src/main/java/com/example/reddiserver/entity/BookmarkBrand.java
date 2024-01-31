@@ -15,27 +15,25 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "bookmarks")
+@Table(name = "bookmark_brands")
 @DynamicInsert
 @DynamicUpdate
-public class Bookmark extends BaseTimeEntity {
+public class BookmarkBrand extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL)
-    private List<BookmarkPost> bookmarkPosts = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY) // 연관관계 주인
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(nullable = false)
-    private String title;
+    @ManyToOne(fetch = FetchType.LAZY) // 연관관계 주인
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 
     @Builder
-    public Bookmark(Member member, String title) {
+    public BookmarkBrand(Member member, Brand brand) {
         this.member = member;
-        this.title = title;
+        this.brand = brand;
     }
 }

@@ -22,10 +22,7 @@ public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<BookmarkPost> bookmarkPosts = new ArrayList<>();
-
+    
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostTag> postTags = new ArrayList<>();
 
