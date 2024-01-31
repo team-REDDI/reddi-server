@@ -32,7 +32,7 @@ public class WebSecurityConfig {
 //                .formLogin(formLogin -> formLogin.disable())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/static/**", "/resources/**", "/css/**", "/js/**", "/images/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
