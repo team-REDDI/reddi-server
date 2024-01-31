@@ -29,4 +29,5 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
 
 	@Query("SELECT b FROM Brand b WHERE b.name like :keyword OR b.content like :keyword")
 	Page<Brand> findByNameContainingOrContentContaining(String keyword, Pageable pageable);
+
 }

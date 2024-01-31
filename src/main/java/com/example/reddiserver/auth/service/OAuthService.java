@@ -29,8 +29,8 @@ public class OAuthService {
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@Transactional
-	public LoginResponseDto login(String code) {
-		GoogleTokenResponseDto googleToken = googleOAuth.requestToken(code);
+	public LoginResponseDto login(String code, String redirectUri) {
+		GoogleTokenResponseDto googleToken = googleOAuth.requestToken(code, redirectUri);
 		System.out.println("googleToken = " + googleToken);
 
 		// 구글토큰으로 구글 유저 정보 조회
