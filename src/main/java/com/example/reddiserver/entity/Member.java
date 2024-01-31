@@ -28,6 +28,9 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<BookmarkBrand> bookmarkBrands = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<BookmarkPost> bookmarkPosts = new ArrayList<>();
+
     @Column(nullable = false, unique = true)
     private String providerId;
 

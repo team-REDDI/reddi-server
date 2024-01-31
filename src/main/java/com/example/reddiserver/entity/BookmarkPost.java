@@ -21,16 +21,16 @@ public class BookmarkPost extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY) // 연관관계 주인
-    @JoinColumn(name = "bookmark_id")
-    private BookmarkBrand bookmark;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY) // 연관관계 주인
     @JoinColumn(name = "post_id")
     private Post post;
 
     @Builder
-    public BookmarkPost(BookmarkBrand bookmark, Post post) {
-        this.bookmark = bookmark;
+    public BookmarkPost(Member member, Post post) {
+        this.member = member;
         this.post = post;
     }
 }

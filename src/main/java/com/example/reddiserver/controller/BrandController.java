@@ -23,7 +23,6 @@ import java.util.List;
 public class BrandController {
 
 	private final BrandService brandService;
-	private final BrandRepository brandRepository;
 	private final OAuthService oAuthService;
 
 	@Operation(summary = "브랜드 리스트 조회")

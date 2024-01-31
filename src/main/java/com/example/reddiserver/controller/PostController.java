@@ -1,5 +1,6 @@
 package com.example.reddiserver.controller;
 
+import com.example.reddiserver.auth.service.OAuthService;
 import com.example.reddiserver.common.ApiResponse;
 import com.example.reddiserver.dto.brand.response.BrandResponseDto;
 import com.example.reddiserver.dto.post.response.HomeCuratingPostDto;
@@ -10,15 +11,13 @@ import com.example.reddiserver.service.NotionService;
 import com.example.reddiserver.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +31,7 @@ import java.util.Map;
 public class PostController {
 	private final PostService postService;
 	private final NotionService notionService;
+	private final OAuthService oAuthService;
 
 	@Operation(summary = "포스트(마케팅) 리스트 조회")
 	@GetMapping("/")
@@ -99,5 +99,32 @@ public class PostController {
 	public ApiResponse<List<PostResponseDto>> getTopNPosts(@RequestParam(defaultValue = "10") int n) {
 		List<PostResponseDto> topNPosts = postService.getTopNPosts(n);
 		return ApiResponse.successResponse(topNPosts);
+	}
+
+	@SecurityRequirement(name = "Authorization") // 인증 필요한 엔드포인트에 설정
+	@Operation(summary = "마케팅(포스트) 북마크 토글 (북마크 추가/삭제)")
+	@PutMapping("/bookmark/toggle")
+	public ApiResponse<HashMap<String, Boolean>> toggleBookmarkPost(@RequestParam Long postId) {
+
+		Long memberId = oAuthService.getUserId();
+
+		boolean isBookmarked = postService.toggleBookmarkPost(memberId, postId);
+
+		HashMap<String, Boolean> response = new HashMap<>();
+		response.put("is_bookmarked", isBookmarked);
+
+		return ApiResponse.successResponse(response);
+	}
+
+	@SecurityRequirement(name = "Authorization") // 인증 필요한 엔드포인트에 설정
+	@Operation(summary = "유저의 마케팅(포스트) 북마크 조회")
+	@GetMapping("/bookmark")
+	public ApiResponse<List<PostResponseDto>> getBookmarkBrands() {
+
+		Long memberId = oAuthService.getUserId();
+
+		List<PostResponseDto> bookmarkPosts = postService.getBookmarkPostList(memberId);
+
+		return ApiResponse.successResponse(bookmarkPosts);
 	}
 }
