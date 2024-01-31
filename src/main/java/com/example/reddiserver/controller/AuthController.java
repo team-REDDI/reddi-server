@@ -9,6 +9,7 @@ import com.example.reddiserver.auth.oauth.GoogleOAuth;
 import com.example.reddiserver.auth.service.OAuthService;
 import com.example.reddiserver.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +28,13 @@ public class AuthController {
 
 
     @Operation(summary = "구글 로그인 링크")
+    @Parameter(name = "redirectUri", description = "http://localhost:3000/auth/google/callback , https://reddi.kr/auth/google/callback 중 하나", required = true)
     @GetMapping("/google-auth-url")
-    public Map<String, String> getGoogleAuthUrl() throws Exception {
+    public Map<String, String> getGoogleAuthUrl(@RequestParam String redirectUri) throws Exception {
 
         Map<String, String> urlMap = new HashMap<>();
-        urlMap.put("url", googleOAuth.getGOOGLE_LOGIN_URL() + "?redirect_uri=" + googleOAuth.getREDIRECT_URI() + "&response_type=code&client_id=" + googleOAuth.getCLIENT_ID() + "&scope=profile email");
+//        urlMap.put("url", googleOAuth.getGOOGLE_LOGIN_URL() + "?redirect_uri=" + googleOAuth.getREDIRECT_URI() + "&response_type=code&client_id=" + googleOAuth.getCLIENT_ID() + "&scope=profile email");
+        urlMap.put("url", googleOAuth.getGOOGLE_LOGIN_URL() + "?redirect_uri=" + redirectUri + "&response_type=code&client_id=" + googleOAuth.getCLIENT_ID() + "&scope=profile email");
         return urlMap;
     }
 
@@ -39,7 +42,8 @@ public class AuthController {
     @PostMapping("/google/login")
     public ApiResponse<LoginResponseDto> googleLogin(@RequestBody GoogleLoginRequestDto googleLoginRequestDto) throws Exception {
         String code = googleLoginRequestDto.getCode();
-        LoginResponseDto loginResponse = oAuthService.login(code);
+        String redirectUri = googleLoginRequestDto.getRedirectUri();
+        LoginResponseDto loginResponse = oAuthService.login(code, redirectUri);
 
         return ApiResponse.successResponse(loginResponse);
     }
