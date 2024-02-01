@@ -218,12 +218,8 @@ public class ChatGptService {
             Prompt prompt = promptOptional.get();
 
             ChatGptPrompt chatGptPrompt = ChatGptPrompt.from(prompt);
-            ChatGptCreationResultDto chatGptCreationResultDto = ChatGptCreationResultDto.from(prompt);
 
-            return ChatGptPromptResponseDto.builder()
-                    .prompt(chatGptPrompt)
-                    .result(chatGptCreationResultDto)
-                    .build();
+            return ChatGptPromptResponseDto.of(prompt, chatGptPrompt);
         } else {
             throw new NotFoundException("해당 프롬프트를 찾을 수가 없습니다 : id = " + id);
         }
