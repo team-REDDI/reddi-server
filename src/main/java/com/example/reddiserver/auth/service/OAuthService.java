@@ -80,9 +80,13 @@ public class OAuthService {
 
 	public Long getUserId() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
 		if (authentication != null) {
-			CustomAuthenticationDetails customDetails = (CustomAuthenticationDetails) authentication.getDetails();
-			return customDetails.getUserId();
+			Object details = authentication.getDetails();
+			if (details instanceof CustomAuthenticationDetails) {
+				CustomAuthenticationDetails customDetails = (CustomAuthenticationDetails) details;
+				return customDetails.getUserId();
+			}
 		}
 
 		return null; // 인증 정보가 없거나 CustomAuthenticationDetails를 사용하지 않는 경우

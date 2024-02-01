@@ -23,7 +23,6 @@ public class ChatGptController {
     private final ChatGptService chatGptService;
     private final OAuthService oAuthService;
 
-    @SecurityRequirement(name = "Authorization")
     @Operation(summary = "ChatGPT로 원하는 브랜드 만들기")
     @PostMapping("/question")
     public ApiResponse<ChatGptCreationResultDto> postChat(@RequestBody ChatGptRequest chatGptRequest) throws JsonProcessingException {
