@@ -6,6 +6,11 @@ import com.example.reddiserver.dto.chatgpt.request.ChatGptMessage;
 import com.example.reddiserver.dto.chatgpt.request.ChatGptRequest;
 import com.example.reddiserver.dto.chatgpt.response.ChatGptCreationResultDto;
 import com.example.reddiserver.dto.chatgpt.response.ChatGptResponse;
+import com.example.reddiserver.dto.chatgpt.response.ChatGptResultResponseDto;
+import com.example.reddiserver.entity.Member;
+import com.example.reddiserver.entity.Prompt;
+import com.example.reddiserver.repository.MemberRepository;
+import com.example.reddiserver.repository.PromptRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,9 +24,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,9 +34,11 @@ public class ChatGptService {
 
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
+    private final PromptRepository promptRepository;
+    private final MemberRepository memberRepository;
 
     public ChatGptService(WebClient.Builder webClientBuilder, @Value("${chatgpt.api-key}")String OPENAIAPIKEY,
-                          ObjectMapper objectMapper) {
+                          ObjectMapper objectMapper, PromptRepository promptRepository, MemberRepository memberRepository) {
         this.webClient = webClientBuilder.
                 baseUrl(ChatGptConfig.CHAT_URL)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + OPENAIAPIKEY)
@@ -40,9 +46,12 @@ public class ChatGptService {
                 .build();
 
         this.objectMapper = objectMapper;
+        this.promptRepository = promptRepository;
+        this.memberRepository = memberRepository;
     }
 
-    public ChatGptCreationResultDto postChat(ChatGptRequest chatGptRequest) throws JsonProcessingException {
+    @Transactional
+    public ChatGptCreationResultDto postChat(Long memberId, ChatGptRequest chatGptRequest) throws JsonProcessingException {
         String[] elements = chatGptRequest.getElements().split(", ");
         String atmospheres = chatGptRequest.getAtmospheres();
         String industries = chatGptRequest.getIndustries();
@@ -181,40 +190,24 @@ public class ChatGptService {
                 .get("content")
                 .asText(), ChatGptResponse.class);
 
-        return convertResponseToDto(elements, chatGptResponse);
-    }
+        Member member = null;
 
-    private static ChatGptCreationResultDto convertResponseToDto(String[] elements, ChatGptResponse chatGptResponse) {
-        Map<String, String> result = new HashMap<>();
-
-        for (String element : elements) {
-            switch (element) {
-                case "네이밍":
-                    result.put("네이밍", chatGptResponse.getName());
-                    result.put("네이밍 이유", chatGptResponse.getReason());
-                    break;
-                case "슬로건":
-                    result.put("슬로건", chatGptResponse.getSlogan());
-                    break;
-                case "비전 미션":
-                    result.put("비전 미션", chatGptResponse.getVision());
-                    break;
-                case "브랜드 에센스":
-                    result.put("브랜드 에센스", chatGptResponse.getEssence());
-                    break;
-                case "키워드":
-                    result.put("키워드", chatGptResponse.getKeyword());
-                    break;
-                case "메니페스토":
-                    result.put("메니페스토", chatGptResponse.getManifesto());
-                    break;
-                default:
-                    log.info("정해진 브랜드 요소 이외에 다른 것이 들어왔음");
-            }
+        if (memberId != null) {
+            member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + memberId));
         }
 
-        return ChatGptCreationResultDto.builder()
-                .result(result)
-                .build();
+        Prompt prompt = promptRepository.save(Prompt.of(member, elements, chatGptResponse));
+
+        return ChatGptCreationResultDto.from(prompt);
+    }
+
+    public List<ChatGptResultResponseDto> getChats(Long memberId) {
+        List<Prompt> prompts = promptRepository.findByMemberId(memberId);
+
+        List<ChatGptResultResponseDto> chatGptResultResponseDtos = prompts.stream()
+                .map(prompt -> ChatGptResultResponseDto.from(prompt))
+                .collect(Collectors.toList());
+
+        return chatGptResultResponseDtos;
     }
 }
