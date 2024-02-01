@@ -16,25 +16,25 @@ public class ChatGptCreationResultDto {
         Map<String, String> result = new LinkedHashMap<>();
 
         if (prompt.getName() != null) {
-            result.put("name", prompt.getName());
+            result.put("네이밍", prompt.getName());
         }
         if (prompt.getReason() != null) {
-            result.put("reason", prompt.getReason());
+            result.put("네이밍 이유", prompt.getReason());
         }
         if (prompt.getSlogan() != null) {
-            result.put("slogan", prompt.getSlogan());
+            result.put("슬로건", prompt.getSlogan());
         }
         if (prompt.getVision() != null) {
-            result.put("vision", prompt.getVision());
+            result.put("비전 미션", prompt.getVision());
         }
         if (prompt.getEssence() != null) {
-            result.put("essence", prompt.getEssence());
+            result.put("브랜드 에센스", prompt.getEssence());
         }
         if (prompt.getKeyword() != null) {
-            result.put("keyword", prompt.getKeyword());
+            result.put("키워드", prompt.getKeyword());
         }
         if (prompt.getManifesto() != null) {
-            result.put("manifesto", prompt.getManifesto());
+            result.put("메니페스토", prompt.getManifesto());
         }
 
         return ChatGptCreationResultDto.builder()
