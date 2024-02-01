@@ -25,6 +25,21 @@ public class Prompt extends BaseTimeEntity {
     private Member member;
 
     @Column
+    private String elements;
+
+    @Column
+    private String atmospheres;
+
+    @Column
+    private String industries;
+
+    @Column
+    private String targets;
+
+    @Column
+    private String similarServices;
+
+    @Column
     private String name;
 
     @Column
@@ -46,7 +61,12 @@ public class Prompt extends BaseTimeEntity {
     private String manifesto;
 
     @Builder
-    public Prompt(Member member, String name, String reason, String slogan, String vision, String essence, String keyword, String manifesto) {
+    public Prompt(String elements, String atmospheres, String industries, String targets, String similarServices, Member member, String name, String reason, String slogan, String vision, String essence, String keyword, String manifesto) {
+        this.elements = elements;
+        this.atmospheres = atmospheres;
+        this.industries = industries;
+        this.targets = targets;
+        this.similarServices = similarServices;
         this.member = member;
         this.name = name;
         this.reason = reason;
@@ -57,8 +77,14 @@ public class Prompt extends BaseTimeEntity {
         this.manifesto = manifesto;
     }
 
-    public static Prompt of(Member member, String[] elements, ChatGptResponse chatGptResponse) {
-        Prompt.PromptBuilder promptBuilder = Prompt.builder().member(member);
+    public static Prompt of(Member member, String[] elements, ChatGptRequest chatGptRequest, ChatGptResponse chatGptResponse) {
+        Prompt.PromptBuilder promptBuilder = Prompt.builder()
+                .member(member)
+                .elements(chatGptRequest.getElements())
+                .atmospheres(chatGptRequest.getAtmospheres())
+                .industries(chatGptRequest.getIndustries())
+                .targets(chatGptRequest.getTargets())
+                .similarServices(chatGptRequest.getSimilarServices());
 
         for (String element : elements) {
             switch (element) {

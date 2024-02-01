@@ -82,6 +82,8 @@ public class OAuthService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (authentication != null) {
+			System.out.println(authentication);
+			System.out.println(authentication.getDetails());
 			Object details = authentication.getDetails();
 			if (details instanceof CustomAuthenticationDetails) {
 				CustomAuthenticationDetails customDetails = (CustomAuthenticationDetails) details;

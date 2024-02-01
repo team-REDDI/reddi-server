@@ -4,9 +4,7 @@ import com.example.reddiserver.config.ChatGptConfig;
 import com.example.reddiserver.dto.chatgpt.request.ChatGptContent;
 import com.example.reddiserver.dto.chatgpt.request.ChatGptMessage;
 import com.example.reddiserver.dto.chatgpt.request.ChatGptRequest;
-import com.example.reddiserver.dto.chatgpt.response.ChatGptCreationResultDto;
-import com.example.reddiserver.dto.chatgpt.response.ChatGptResponse;
-import com.example.reddiserver.dto.chatgpt.response.ChatGptResultResponseDto;
+import com.example.reddiserver.dto.chatgpt.response.*;
 import com.example.reddiserver.entity.Member;
 import com.example.reddiserver.entity.Prompt;
 import com.example.reddiserver.repository.MemberRepository;
@@ -22,9 +20,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -196,7 +196,7 @@ public class ChatGptService {
             member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + memberId));
         }
 
-        Prompt prompt = promptRepository.save(Prompt.of(member, elements, chatGptResponse));
+        Prompt prompt = promptRepository.save(Prompt.of(member, elements, chatGptRequest, chatGptResponse));
 
         return ChatGptCreationResultDto.from(prompt);
     }
@@ -209,5 +209,23 @@ public class ChatGptService {
                 .collect(Collectors.toList());
 
         return chatGptResultResponseDtos;
+    }
+
+    public ChatGptPromptResponseDto getPrompt(Long id) {
+        Optional<Prompt> promptOptional = promptRepository.findById(id);
+
+        if (promptOptional.isPresent()) {
+            Prompt prompt = promptOptional.get();
+
+            ChatGptPrompt chatGptPrompt = ChatGptPrompt.from(prompt);
+            ChatGptCreationResultDto chatGptCreationResultDto = ChatGptCreationResultDto.from(prompt);
+
+            return ChatGptPromptResponseDto.builder()
+                    .prompt(chatGptPrompt)
+                    .result(chatGptCreationResultDto)
+                    .build();
+        } else {
+            throw new NotFoundException("해당 프롬프트를 찾을 수가 없습니다 : id = " + id);
+        }
     }
 }

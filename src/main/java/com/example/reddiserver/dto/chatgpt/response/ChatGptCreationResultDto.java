@@ -34,7 +34,7 @@ public class ChatGptCreationResultDto {
             result.put("키워드", prompt.getKeyword());
         }
         if (prompt.getManifesto() != null) {
-            result.put("메니페스토", prompt.getManifesto());
+            result.put("메니페스", prompt.getManifesto());
         }
 
         return ChatGptCreationResultDto.builder()

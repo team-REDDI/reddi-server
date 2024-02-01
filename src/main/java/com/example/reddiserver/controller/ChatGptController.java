@@ -4,6 +4,7 @@ import com.example.reddiserver.auth.service.OAuthService;
 import com.example.reddiserver.common.ApiResponse;
 import com.example.reddiserver.dto.chatgpt.request.ChatGptRequest;
 import com.example.reddiserver.dto.chatgpt.response.ChatGptCreationResultDto;
+import com.example.reddiserver.dto.chatgpt.response.ChatGptPromptResponseDto;
 import com.example.reddiserver.dto.chatgpt.response.ChatGptResultResponseDto;
 import com.example.reddiserver.service.ChatGptService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,10 +24,12 @@ public class ChatGptController {
     private final ChatGptService chatGptService;
     private final OAuthService oAuthService;
 
+    @SecurityRequirement(name = "Authorization")
     @Operation(summary = "ChatGPT로 원하는 브랜드 만들기")
     @PostMapping("/question")
     public ApiResponse<ChatGptCreationResultDto> postChat(@RequestBody ChatGptRequest chatGptRequest) throws JsonProcessingException {
         Long memberId = oAuthService.getUserId();
+        System.out.println(memberId);
         return ApiResponse.successResponse(chatGptService.postChat(memberId, chatGptRequest), "AI 브랜딩 성공");
     }
 
@@ -35,10 +38,14 @@ public class ChatGptController {
     @GetMapping("/")
     public ApiResponse<List<ChatGptResultResponseDto>> getChats() {
         Long memberId = oAuthService.getUserId();
-        return ApiResponse.successResponse(chatGptService.getChats(memberId));
+        return ApiResponse.successResponse(chatGptService.getChats(memberId), "REDDI로 생성한 브랜드 불러오기");
     }
-//
-//    @Operation(summary = "프롬프트 불러오기")
-//    @GetMapping("/{id}")
 
+    @SecurityRequirement(name = "Authorization")
+    @Operation(summary = "프롬프트 불러오기")
+    @GetMapping("/prompt")
+    public ApiResponse<ChatGptPromptResponseDto> getPrompt(@RequestParam(required = true) Long id) {
+        Long memberId = oAuthService.getUserId();
+        return ApiResponse.successResponse(chatGptService.getPrompt(id), "프롬프트 불러오기");
+    }
 }
