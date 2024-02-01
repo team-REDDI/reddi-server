@@ -130,7 +130,7 @@ public class ChatGptService {
 
                 위 네 가지 정보에 적합한 새로운 브랜드 정보를 생성해줘
 
-                3. 당신이 출력(생성)해야하는 브랜드 정보\s
+                3. 당신이 출력(생성)해야하는 브랜드 정보
 
                 생성할 때 들어갈 key 값들은 총 7가지로, 아래와 같아
                 '브랜드 네이밍(name)', '브랜드 네이밍 이유(reason)', '브랜드 슬로건(slogan)', '비전(vision)'
@@ -143,13 +143,13 @@ public class ChatGptService {
 
                 <브랜드 생성 JSON 형식>
                 {
-                    'name': string,
-                    'reason': string,
-                    'slogan': string,
-                    'vision': string,
-                    'essence': string,
-                    'keyword': string,
-                    'manifesto': string
+                    "name": string,
+                    "reason": string,
+                    "slogan": string,
+                    "vision": string,
+                    "essence": string,
+                    "keyword": string,
+                    "manifesto": string
                 }
                 <브랜드 생성 JSON 형식 끝>
 
@@ -175,6 +175,10 @@ public class ChatGptService {
                 5. 제약 조건
 
                 5-1. 사용자로부터 입력받는 값 중 '유사 서비스' 와 당신이 출력하는 브랜드의 정보가 같거나 비슷하면 안 돼. 독창적인 브랜드를 생성해야해
+                
+                5-2. 출력 JSON 형식의 key 값들은 반드시 위에서 제시한 7가지 key 값들로 생성해야해
+                
+                5-3. 해당 key 값들은 반드시 쌍따옴표로 감싸져 있어야해
                 """.formatted(data1, data2, data3);
 
         String user_content = """
