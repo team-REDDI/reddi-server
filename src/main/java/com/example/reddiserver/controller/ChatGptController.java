@@ -29,7 +29,6 @@ public class ChatGptController {
     @PostMapping("/question")
     public ApiResponse<ChatGptCreationResultDto> postChat(@RequestBody ChatGptRequest chatGptRequest) throws JsonProcessingException {
         Long memberId = oAuthService.getUserId();
-        System.out.println(memberId);
         return ApiResponse.successResponse(chatGptService.postChat(memberId, chatGptRequest), "AI 브랜딩 성공");
     }
 
@@ -47,5 +46,13 @@ public class ChatGptController {
     public ApiResponse<ChatGptPromptResponseDto> getPrompt(@RequestParam(required = true) Long id) {
         Long memberId = oAuthService.getUserId();
         return ApiResponse.successResponse(chatGptService.getPrompt(id), "프롬프트 불러오기");
+    }
+
+    @SecurityRequirement(name = "Authorization")
+    @Operation(summary = "프롬프트 저장하기")
+    @PutMapping("/save")
+    public ApiResponse putPrompt(@RequestParam(required = true) Long id) {
+        chatGptService.putPrompt(id);
+        return ApiResponse.successWithNoContent();
     }
 }

@@ -227,7 +227,7 @@ public class ChatGptService {
     }
 
     public List<ChatGptResultResponseDto> getChats(Long memberId) {
-        List<Prompt> prompts = promptRepository.findByMemberId(memberId);
+        List<Prompt> prompts = promptRepository.findByMemberIdAndIsSaveTrue(memberId);
 
         List<ChatGptResultResponseDto> chatGptResultResponseDtos = prompts.stream()
                 .map(prompt -> ChatGptResultResponseDto.from(prompt))
@@ -245,6 +245,19 @@ public class ChatGptService {
             ChatGptPrompt chatGptPrompt = ChatGptPrompt.from(prompt);
 
             return ChatGptPromptResponseDto.of(prompt, chatGptPrompt);
+        } else {
+            throw new NotFoundException("해당 프롬프트를 찾을 수가 없습니다 : id = " + id);
+        }
+    }
+
+    @Transactional
+    public void putPrompt(Long id) {
+        Optional<Prompt> promptOptional = promptRepository.findById(id);
+
+        if (promptOptional.isPresent()) {
+            Prompt prompt = promptOptional.get();
+
+            promptRepository.save(Prompt.updateIsSave(prompt));
         } else {
             throw new NotFoundException("해당 프롬프트를 찾을 수가 없습니다 : id = " + id);
         }

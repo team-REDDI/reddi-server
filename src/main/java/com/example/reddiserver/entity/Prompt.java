@@ -60,6 +60,9 @@ public class Prompt extends BaseTimeEntity {
     @Column
     private String manifesto;
 
+    @Column
+    private boolean isSave;
+
     @Builder
     public Prompt(String elements, String atmospheres, String industries, String targets, String similarServices, Member member, String name, String reason, String slogan, String vision, String essence, String keyword, String manifesto) {
         this.elements = elements;
@@ -75,6 +78,7 @@ public class Prompt extends BaseTimeEntity {
         this.essence = essence;
         this.keyword = keyword;
         this.manifesto = manifesto;
+        this.isSave = false;
     }
 
     public static Prompt of(Member member, String[] elements, ChatGptRequest chatGptRequest, ChatGptResponse chatGptResponse) {
@@ -113,5 +117,11 @@ public class Prompt extends BaseTimeEntity {
         }
 
         return promptBuilder.build();
+    }
+
+    public static Prompt updateIsSave(Prompt prompt) {
+        prompt.isSave = true;
+
+        return prompt;
     }
 }

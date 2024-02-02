@@ -10,6 +10,7 @@ import java.util.Map;
 @Builder
 @Getter
 public class ChatGptCreationResultDto {
+    private Long id;
     private Map<String, String> result;
 
     public static ChatGptCreationResultDto from(Prompt prompt) {
@@ -38,6 +39,7 @@ public class ChatGptCreationResultDto {
         }
 
         return ChatGptCreationResultDto.builder()
+                .id(prompt.getId())
                 .result(result)
                 .build();
     }
