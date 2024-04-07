@@ -28,13 +28,14 @@
 
 # Tech Stack
 ## Back-end
-![img](https://github.com/team-Reddi/reddi-server/assets/89639470/09313865-5b8c-467b-b321-0e0f24279d74)
+<img src="https://github.com/team-Reddi/reddi-server/assets/89639470/09313865-5b8c-467b-b321-0e0f24279d74" alt="img" width="50%">
 
 ## Infra
-![img](https://github.com/team-Reddi/reddi-server/assets/89639470/3fcda4ba-a2d1-4b10-afad-b989bea247d8)
+<img src="https://github.com/team-Reddi/reddi-server/assets/89639470/3fcda4ba-a2d1-4b10-afad-b989bea247d8" alt="img" width="50%">
 
 ## 외부 API
-![img](https://github.com/team-Reddi/reddi-server/assets/89639470/b219c21b-f933-463d-b543-27730bf8cd4f)
+<img src="https://github.com/team-Reddi/reddi-server/assets/89639470/b219c21b-f933-463d-b543-27730bf8cd4f" alt="img" width="30%">
+
 
 <br/>
 
